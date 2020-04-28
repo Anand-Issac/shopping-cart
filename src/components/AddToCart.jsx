@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Counter from './Counter';
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';

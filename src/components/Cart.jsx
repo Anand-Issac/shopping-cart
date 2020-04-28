@@ -27,7 +27,7 @@ class Item extends Component {
     }
 }
 
-class Cart extends Component {
+export default class Cart extends Component {
 
     constructor(props) {
         super(props);
@@ -47,8 +47,8 @@ class Cart extends Component {
     totalItemsinCart(){
     
         let totalItems = 0;
-        console.log(this.state.ids);
-        this.state.ids.map((item, key) => 
+        console.log(this.props.ids);
+        this.props.ids.map((item, key) => 
             totalItems += item.quantity
         )
         return totalItems;
@@ -56,7 +56,7 @@ class Cart extends Component {
 
     totalPriceofCart(){
         let totalPrice = 0;
-        this.state.ids.map((item, key) =>
+        this.props.ids.map((item, key) =>
             {
                 if (item.quantity == 1){
                     totalPrice += Number(item.price)
@@ -72,22 +72,7 @@ class Cart extends Component {
 
     increaseItemQuantity(itemId){
         //if add button pressed, increase quantity of itemId by 1
-       
-        const idList = this.state.ids.slice();
-    
-        for (let i = 0; i < idList.length; i++){
-            if (idList[i].id == itemId){
-                const currentQuantity = idList[i].quantity;
-                idList[i].quantity = currentQuantity + 1;
-             
-                this.setState((state) => ({
-                    ids: idList
-                }));
-        
-            }
-        }
-        
-        
+        this.props.addButtonChange(itemId);      
     }
     
     render() { 
@@ -98,7 +83,7 @@ class Cart extends Component {
             <div>
                 <h1 style={style}>{this.totalItemsinCart()} Items in Cart</h1>
                 <h3 style={style}>Price of Cart: ${this.totalPriceofCart()} </h3>
-                {this.state.ids.map((item, key) =>
+                {this.props.ids.map((item, key) =>
                 <Item item={item} key={item.id} addButtonChange={this.increaseItemQuantity}/>
                 )}
 
@@ -109,16 +94,6 @@ class Cart extends Component {
     }
 }
  
-export default class Counter extends Component {
-    
 
-    render() { 
-        return (  
-            <div>
-                
-                <Cart ids={this.props.ids}/>
-            </div>
-        );
-    }
-}
+
 

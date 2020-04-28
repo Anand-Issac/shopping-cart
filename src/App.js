@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import AddToCart from './components/AddToCart';
-import Counter from './components/Counter'
+import Cart from './components/Cart'
 import Navbar from './components/Navbar';
 
 export default class App extends Component {
@@ -16,7 +16,7 @@ export default class App extends Component {
     };
 
     this.updateCartInfo = this.updateCartInfo.bind(this);
-   
+    this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
   
   }
 
@@ -38,7 +38,7 @@ export default class App extends Component {
         idList[uniqueIndex].quantity = this.state.ids[uniqueIndex].quantity + 1;
 
         this.setState((state) => ({
-          ids: idList[uniqueIndex]
+          ids: idList
         }));
 
       }
@@ -57,6 +57,24 @@ export default class App extends Component {
    
   }
 
+  increaseItemQuantity(itemId){
+    
+    const idList = this.state.ids;
+    
+        for (let i = 0; i < idList.length; i++){
+            if (idList[i].id == itemId){
+                const currentQuantity = idList[i].quantity;
+                idList[i].quantity = currentQuantity + 1;
+                
+                this.setState((state) => ({
+                    ids: idList
+                }));
+             
+               
+            }
+        }
+    
+  }
 
   render() { 
       return (  
@@ -64,7 +82,7 @@ export default class App extends Component {
           <Router>
               <div>
                   <Navbar/>
-                  <Route path="/" exact strict render={(props) => <Counter {...props} ids={this.state.ids}/>}   />
+                  <Route path="/" exact strict render={(props) => <Cart {...props} ids={this.state.ids} addButtonChange={this.increaseItemQuantity}/>}   />
 
                   <Route path="/addToCart" exact strict render={(props) => <AddToCart {...props} updateCart={this.updateCartInfo}/>}/>
 

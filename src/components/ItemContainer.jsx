@@ -73,7 +73,7 @@ export default function MiddleDividers(props) {
         <div className={classes.section2} style={style}>
       
             <div>
-            <AddCircleRoundedIcon onClick={()=>{console.log("Clicked")}} style={{fontSize:30, marginRight:30}}></AddCircleRoundedIcon>
+            <AddCircleRoundedIcon onClick={()=>{props.addButtonChange(props.value.id)}} style={{fontSize:30, marginRight:30}}></AddCircleRoundedIcon>
             <RemoveCircleRoundedIcon style={{fontSize:30, marginRight:30}}></RemoveCircleRoundedIcon>
             <DeleteRoundedIcon style={{fontSize:30}}></DeleteRoundedIcon>
     

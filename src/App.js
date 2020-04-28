@@ -16,17 +16,18 @@ export default class App extends Component {
     };
 
     this.updateCartInfo = this.updateCartInfo.bind(this);
+   
   
   }
 
   updateCartInfo(info){
-    const ids = this.state.ids;
+    const idList = this.state.ids;
     // first we must check if the id list is empty; if so we can initialize it
     // if not empty, loop through array and check if info.id is unique
       // if unique: push it to the array
       // else: increase the object with that id and increase it's quantity
 
-    if (ids.length == 0 ){
+    if (idList.length == 0 ){
       this.state.ids.push({id: info.id, name: info.name, price: info.price, quantity:1});
     } else{
       let uniqueIndex = this.uniqueIDCheck(info);
@@ -34,7 +35,12 @@ export default class App extends Component {
         //id was unique
         this.state.ids.push({id: info.id, name: info.name, price: info.price, quantity:1});
       }else{
-        this.state.ids[uniqueIndex].quantity = this.state.ids[uniqueIndex].quantity + 1;
+        idList[uniqueIndex].quantity = this.state.ids[uniqueIndex].quantity + 1;
+
+        this.setState((state) => ({
+          ids: idList[uniqueIndex]
+        }));
+
       }
     }
     
@@ -50,6 +56,7 @@ export default class App extends Component {
     return -1;
    
   }
+
 
   render() { 
       return (  

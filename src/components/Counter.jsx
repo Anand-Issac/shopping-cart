@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css'
+import update from 'react-addons-update'; 
 
 import { BrowserRouter as Router, Link, NavLink, Redirect, Prompt} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
-import MiddleDividers from './MiddleDividers';
-
+import ItemContainer from './ItemContainer';
 
 
 class Item extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
       
+      }
+
+    increaseItemQuantity(itemId){
+        this.props.addButtonChange(itemId);
+    }
+
     render() { 
         return ( 
-           <MiddleDividers value={this.props.item}/>
+           <ItemContainer value={this.props.item}  addButtonChange={this.increaseItemQuantity}  />
           
          );
     }
@@ -19,9 +29,26 @@ class Item extends Component {
 
 class Cart extends Component {
 
+    constructor(props) {
+        super(props);
+        const idList = this.props.ids;
+        this.state = {
+            ids: idList
+        }
+
+        this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
+      
+      }
+
+    // componentWillReceiveProps({ids}) {
+    //     this.setState({...this.state,ids})
+    // }
+    
     totalItemsinCart(){
+    
         let totalItems = 0;
-        this.props.ids.map((item, key) => 
+        console.log(this.state.ids);
+        this.state.ids.map((item, key) => 
             totalItems += item.quantity
         )
         return totalItems;
@@ -29,7 +56,7 @@ class Cart extends Component {
 
     totalPriceofCart(){
         let totalPrice = 0;
-        this.props.ids.map((item, key) =>
+        this.state.ids.map((item, key) =>
             {
                 if (item.quantity == 1){
                     totalPrice += Number(item.price)
@@ -42,6 +69,26 @@ class Cart extends Component {
         )
         return totalPrice;
     }
+
+    increaseItemQuantity(itemId){
+        //if add button pressed, increase quantity of itemId by 1
+       
+        const idList = this.state.ids.slice();
+    
+        for (let i = 0; i < idList.length; i++){
+            if (idList[i].id == itemId){
+                const currentQuantity = idList[i].quantity;
+                idList[i].quantity = currentQuantity + 1;
+             
+                this.setState((state) => ({
+                    ids: idList
+                }));
+        
+            }
+        }
+        
+        
+    }
     
     render() { 
         var style = {
@@ -51,8 +98,8 @@ class Cart extends Component {
             <div>
                 <h1 style={style}>{this.totalItemsinCart()} Items in Cart</h1>
                 <h3 style={style}>Price of Cart: ${this.totalPriceofCart()} </h3>
-                {this.props.ids.map((item, key) =>
-                <Item item={item} key={item.id} />
+                {this.state.ids.map((item, key) =>
+                <Item item={item} key={item.id} addButtonChange={this.increaseItemQuantity}/>
                 )}
 
             </div>
@@ -64,6 +111,7 @@ class Cart extends Component {
  
 export default class Counter extends Component {
     
+
     render() { 
         return (  
             <div>

@@ -54,6 +54,7 @@ class NameForm extends React.Component {
     }
 
     handleNameChange(event) {
+        //sets state of new name
         this.setState({
             info: {
                 id: this.state.info.id,

@@ -6,9 +6,13 @@ import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
 
+import {readItemsData} from './server';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
+    const data = readItemsData();
+
     this.state = {
       ids : [
   
@@ -17,6 +21,8 @@ export default class App extends Component {
 
     this.updateCartInfo = this.updateCartInfo.bind(this);
     this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
+    this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
   
   }
 
@@ -45,7 +51,7 @@ export default class App extends Component {
     }
     
   }
-  
+  //helper function that checks if id is unique (return -1 if unique; return index if not)
   uniqueIDCheck(info){
     const idList = this.state.ids;
     for (let i = 0; i < idList.length; i++){
@@ -57,24 +63,67 @@ export default class App extends Component {
    
   }
 
+  // increases quantity of item where add button was pressed
   increaseItemQuantity(itemId){
     
     const idList = this.state.ids;
     
-        for (let i = 0; i < idList.length; i++){
-            if (idList[i].id == itemId){
-                const currentQuantity = idList[i].quantity;
-                idList[i].quantity = currentQuantity + 1;
-                
-                this.setState((state) => ({
-                    ids: idList
-                }));
-             
-               
-            }
+    for (let i = 0; i < idList.length; i++){
+        if (idList[i].id == itemId){
+            const currentQuantity = idList[i].quantity;
+            idList[i].quantity = currentQuantity + 1;
+            this.setState((state) => ({
+                ids: idList
+            })); 
         }
-    
+    }
   }
+
+  decreaseItemQuantity(itemId){
+    const idList = this.state.ids;
+    const newList = [];
+
+    for (let i = 0; i < idList.length; i++){
+        //target item that had decrease button pressed
+        if (idList[i].id == itemId){
+            const currentQuantity = idList[i].quantity;
+            // if quantity is greater than 0, decrease by 1
+            if (currentQuantity > 1){
+              idList[i].quantity = currentQuantity - 1;
+              newList.push(idList[i]);
+            // if quantity is 0, then do not push into new list
+            } else{
+              continue;
+            }
+  
+        }else{
+          newList.push(idList[i]);
+        }
+    }
+    this.setState((state) => ({
+      ids: newList
+    })); 
+
+  }
+
+  deleteItem(itemId){
+    const idList = this.state.ids;
+    const newList = [];
+
+    for (let i = 0; i < idList.length; i++){
+        //target item that had decrease button pressed
+        if (idList[i].id == itemId){
+            continue;
+        }else{
+          newList.push(idList[i]);
+        }
+    }
+    this.setState((state) => ({
+      ids: newList
+    })); 
+  }
+
+
 
   render() { 
       return (  
@@ -82,7 +131,7 @@ export default class App extends Component {
           <Router>
               <div>
                   <Navbar/>
-                  <Route path="/" exact strict render={(props) => <Cart {...props} ids={this.state.ids} addButtonChange={this.increaseItemQuantity}/>}   />
+                  <Route path="/" exact strict render={(props) => <Cart {...props} ids={this.state.ids} addButtonChange={this.increaseItemQuantity}  removeButtonChange={this.decreaseItemQuantity}   deleteButtonChange={this.deleteItem}      />}   />
 
                   <Route path="/addToCart" exact strict render={(props) => <AddToCart {...props} updateCart={this.updateCartInfo}/>}/>
 

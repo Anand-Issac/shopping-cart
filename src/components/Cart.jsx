@@ -12,16 +12,26 @@ class Item extends Component {
         super(props);
         
         this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
-      
+        this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
       }
 
     increaseItemQuantity(itemId){
         this.props.addButtonChange(itemId);
     }
 
+    decreaseItemQuantity(itemId){
+        console.log("decrease 1")
+        this.props.removeButtonChange(itemId);
+    }
+
+    deleteItem(itemId){
+        this.props.deleteButtonChange(itemId);
+    }
+
     render() { 
         return ( 
-           <ItemContainer value={this.props.item}  addButtonChange={this.increaseItemQuantity}  />
+           <ItemContainer value={this.props.item}  addButtonChange={this.increaseItemQuantity} removeButtonChange={this.decreaseItemQuantity} deleteButtonChange={this.deleteItem} />
           
          );
     }
@@ -32,17 +42,16 @@ export default class Cart extends Component {
     constructor(props) {
         super(props);
         const idList = this.props.ids;
+        
         this.state = {
             ids: idList
         }
 
         this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
-      
+        this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
       }
 
-    // componentWillReceiveProps({ids}) {
-    //     this.setState({...this.state,ids})
-    // }
     
     totalItemsinCart(){
     
@@ -74,6 +83,15 @@ export default class Cart extends Component {
         //if add button pressed, increase quantity of itemId by 1
         this.props.addButtonChange(itemId);      
     }
+
+    decreaseItemQuantity(itemId){
+        console.log("decrease Cart ")
+        this.props.removeButtonChange(itemId);
+    }
+
+    deleteItem(itemId){
+        this.props.deleteButtonChange(itemId);
+    }
     
     render() { 
         var style = {
@@ -84,7 +102,7 @@ export default class Cart extends Component {
                 <h1 style={style}>{this.totalItemsinCart()} Items in Cart</h1>
                 <h3 style={style}>Price of Cart: ${this.totalPriceofCart()} </h3>
                 {this.props.ids.map((item, key) =>
-                <Item item={item} key={item.id} addButtonChange={this.increaseItemQuantity}/>
+                <Item item={item} key={item.id} addButtonChange={this.increaseItemQuantity} removeButtonChange={this.decreaseItemQuantity} deleteButtonChange={this.deleteItem}/>
                 )}
 
             </div>

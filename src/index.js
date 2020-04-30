@@ -4,11 +4,10 @@ import './index.css';
 
 import Theme from './Theme';
 
-
-
 ReactDOM.render(
     
     <Theme/>,
     document.getElementById('root')
 );
+
 

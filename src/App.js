@@ -6,19 +6,23 @@ import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
 
-import {readItemsData} from './server';
+//import {readItemsData} from './server';
+import {writeItemData} from './server';
+
+import firebase from 'firebase';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-    const data = readItemsData();
+
+    this.itemsFromFirebase = firebase.database().ref("items");
 
     this.state = {
       ids : [
   
       ],
     };
-
+    
     this.updateCartInfo = this.updateCartInfo.bind(this);
     this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
     this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
@@ -26,20 +30,44 @@ export default class App extends Component {
   
   }
 
+  // good place to initialize state with requests to databases, etc..
+  componentDidMount(){
+    let App = this;
+    var itemsList = [];
+    this.itemsFromFirebase.on("value", function(snapshot) {
+        console.log(snapshot.val());
+        snapshot.forEach(function(childSnapshot){
+            console.log(childSnapshot.val());
+            itemsList.push(childSnapshot.val());
+        });
+        console.log("itemsList is " + itemsList.join(", "));
+        App.setState((state) => ({
+          ids: itemsList
+        }));
+       
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
+
+  }
   updateCartInfo(info){
     const idList = this.state.ids;
     // first we must check if the id list is empty; if so we can initialize it
     // if not empty, loop through array and check if info.id is unique
       // if unique: push it to the array
       // else: increase the object with that id and increase it's quantity
-
+    console.log("starts");
     if (idList.length == 0 ){
       this.state.ids.push({id: info.id, name: info.name, price: info.price, quantity:1});
+      console.log("begin write");
+      //writeItemData(info);
+      console.log("end write");
     } else{
       let uniqueIndex = this.uniqueIDCheck(info);
       if (uniqueIndex < 0){
         //id was unique
         this.state.ids.push({id: info.id, name: info.name, price: info.price, quantity:1});
+        //writeItemData(info);
       }else{
         idList[uniqueIndex].quantity = this.state.ids[uniqueIndex].quantity + 1;
 

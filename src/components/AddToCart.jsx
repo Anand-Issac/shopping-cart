@@ -4,7 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import { withStyles } from '@material-ui/core/styles';
-import {writeItemData} from '../server';
+
+//import {writeItemData} from '../server';
 
 
 const StyledButton = withStyles({
@@ -167,7 +168,7 @@ export default class AddToCart extends Component {
             // figure out how forms work in react: https://reactjs.org/docs/forms.html
             <div>
                 <NameForm sendData={this.getData}/>
-                <button onClick={writeItemData}>FIRE BASE</button>
+                
             </div>
             
         );

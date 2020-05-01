@@ -42,7 +42,7 @@ export default class Cart extends Component {
     constructor(props) {
         super(props);
         const idList = this.props.ids;
-        
+        console.log("first item is " + idList[0]);
         this.state = {
             ids: idList
         }

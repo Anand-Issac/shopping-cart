@@ -1,8 +1,10 @@
+import App from './App';
+
 var firebase = require("firebase/app");
 require('firebase/auth');
 require('firebase/database');
 
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyAYAC2C96gTJg0yTQJ7u1lJiq-gm87Em0o",
     authDomain: "shopping-cart-b4473.firebaseapp.com",
     databaseURL: "https://shopping-cart-b4473.firebaseio.com",
@@ -25,23 +27,39 @@ export function writeItemData(info){
         }
     };
 
-    ref.push({
+    ref.child(info.id).set({
+        id: info.id,
+        name: info.name,
+        price: info.price,
+        quantity: info.quantity
+    }, onComplete);
+
+    // ref.push({
         
-            Id: "199",
-            Name: "iPhone",
-            Price: 500,
-            Quantity: 3
+    //         Id: info.id,
+    //         Name: info.name,
+    //         Price: info.price,
+    //         Quantity: info.quantity
         
-    });
+    // }, onComplete);
 
     console.log("firebase clicked" );
 }
 
-export function readItemsData(){
-    var ref = firebase.database().ref("items");
-    ref.on("value", function(snapshot) {
-        console.log(snapshot.val());
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    });
-}
+// export function readItemsData(){
+//     var ref = firebase.database().ref("items");
+//     var itemsList = [];
+//     ref.on("value", function(snapshot) {
+//         console.log(snapshot.val());
+//         snapshot.forEach(function(childSnapshot){
+//             console.log(childSnapshot.val());
+//             itemsList.push(childSnapshot.val());
+//         });
+//         console.log("itemsList is " + itemsList.join(", "));
+       
+//     }, function (errorObject) {
+//         console.log("The read failed: " + errorObject.code);
+//     });
+
+//     return itemsList;
+// }

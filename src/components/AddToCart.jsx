@@ -163,9 +163,7 @@ export default class AddToCart extends Component {
     render() { 
         
         return (
-            //add form here
-            // most likely will create a <Cart> component from here and update it from here!? 
-            // figure out how forms work in react: https://reactjs.org/docs/forms.html
+
             <div>
                 <NameForm sendData={this.getData}/>
                 

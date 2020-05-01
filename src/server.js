@@ -17,7 +17,7 @@ export const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export function writeItemData(info){
+export function writeItemData(ids){
     var ref = firebase.database().ref("items");
     var onComplete = function(error) {
         if (error) {
@@ -27,13 +27,16 @@ export function writeItemData(info){
         }
     };
 
-    ref.child(info.id).set({
-        id: info.id,
-        name: info.name,
-        price: info.price,
-        quantity: info.quantity
-    }, onComplete);
-
+    for (var i=0; i < ids.length; i++ ){
+        var info = ids[i];
+        console.log("info name is " + info.name);
+        ref.child(info.id).set({
+            id: info.id,
+            name: info.name,
+            price: info.price,
+            quantity: info.quantity
+        }, onComplete);
+    }
     // ref.push({
         
     //         Id: info.id,

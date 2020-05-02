@@ -6,9 +6,8 @@ import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
 
-//import {readItemsData} from './server';
-import {writeItemData} from './server';
 
+import {writeItemData} from './server';
 import firebase from 'firebase';
 
 export default class App extends Component {
@@ -21,6 +20,9 @@ export default class App extends Component {
       ids : [
   
       ],
+      removedIds:[
+
+      ]
     };
     
     this.updateCartInfo = this.updateCartInfo.bind(this);
@@ -31,9 +33,10 @@ export default class App extends Component {
   }
 
   // good place to initialize state with requests to databases, etc..
+  //this will process before first render
   componentDidMount(){
     let App = this;
-    
+    //asynchronous call to firebase collection that suscribes to changes
     this.itemsFirebaseRef.on("value", function(snapshot) {
         var itemsList = [];
         console.log(snapshot.val());
@@ -41,7 +44,7 @@ export default class App extends Component {
             console.log(childSnapshot.val());
             itemsList.push(childSnapshot.val());
         });
-        console.log("itemsList is " + itemsList.join(", "));
+        
         App.setState((state) => ({
           ids: itemsList
         }));
@@ -51,21 +54,29 @@ export default class App extends Component {
     });
   }
 
+  //good place to handle updates to component state changes
+  //process after first render 
   componentDidUpdate(prevProps, prevState ){
-    if (prevState !== this.state){
-      writeItemData((this.state.ids));
-      console.log("updating?");
+    if (prevState.ids !== this.state.ids){
+      
+      writeItemData(this.state.ids, this.state.removedIds);
+      this.setState({
+        removedIds: []
+      });
     }
+   
   }
   updateCartInfo(info){
+    //ES6 way of copying a list (idList and this.state.ids dont share same memory addy)
     const idList = [...this.state.ids];
-    // first we must check if the id list is empty; if so we can initialize it
+    
+
+    // initialize idlist if empty
     // if not empty, loop through array and check if info.id is unique
       // if unique: push it to the array
       // else: increase the object with that id and increase it's quantity
-    console.log("starts");
+    
     if (idList.length == 0 ){
-      //this.state.ids.push({id: info.id, name: info.name, price: info.price, quantity:1});
       
       idList.push({id: info.id, name: info.name, price: info.price, quantity:1});
       this.setState((state) => ({
@@ -95,7 +106,7 @@ export default class App extends Component {
   uniqueIDCheck(info){
     const idList = this.state.ids;
     for (let i = 0; i < idList.length; i++){
-      if (idList[i].id == info.id){
+      if (idList[i].id === info.id){
         return i;
       }
     }
@@ -109,7 +120,7 @@ export default class App extends Component {
     const idList = this.state.ids;
     
     for (let i = 0; i < idList.length; i++){
-        if (idList[i].id == itemId){
+        if (idList[i].id === itemId){
             const currentQuantity = idList[i].quantity;
             idList[i].quantity = currentQuantity + 1;
             this.setState((state) => ({
@@ -119,13 +130,16 @@ export default class App extends Component {
     }
   }
 
+  //decreases quantity of item where remove button pressed
   decreaseItemQuantity(itemId){
     const idList = this.state.ids;
+    const removedIdsList = [...this.state.removedIds];
     const newList = [];
+
 
     for (let i = 0; i < idList.length; i++){
         //target item that had decrease button pressed
-        if (idList[i].id == itemId){
+        if (idList[i].id === itemId){
             const currentQuantity = idList[i].quantity;
             // if quantity is greater than 0, decrease by 1
             if (currentQuantity > 1){
@@ -133,7 +147,7 @@ export default class App extends Component {
               newList.push(idList[i]);
             // if quantity is 0, then do not push into new list
             } else{
-              continue;
+              removedIdsList.push(idList[i]);
             }
   
         }else{
@@ -141,25 +155,29 @@ export default class App extends Component {
         }
     }
     this.setState((state) => ({
-      ids: newList
+      ids: newList,
+      removedIds: removedIdsList
     })); 
 
   }
 
+  //deletes item from item where delete button pressed
   deleteItem(itemId){
     const idList = this.state.ids;
+    const removedIdsList = [...this.state.removedIds];
     const newList = [];
 
     for (let i = 0; i < idList.length; i++){
         //target item that had decrease button pressed
-        if (idList[i].id == itemId){
-            continue;
+        if (idList[i].id === itemId){
+          removedIdsList.push(idList[i]);
         }else{
           newList.push(idList[i]);
         }
     }
     this.setState((state) => ({
-      ids: newList
+      ids: newList,
+      removedIds: removedIdsList
     })); 
   }
 

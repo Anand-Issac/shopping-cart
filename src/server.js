@@ -17,8 +17,9 @@ export const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export function writeItemData(ids){
+export function writeItemData(ids, removedIds){
     var ref = firebase.database().ref("items");
+    //callback function which logs if write to firebase failed / completed
     var onComplete = function(error) {
         if (error) {
             console.log('Write to Firebase failed');
@@ -26,10 +27,9 @@ export function writeItemData(ids){
             console.log('Write to Firebase completed');
         }
     };
-
+    //loops through every id in the id list and sets the child to the properties of info object
     for (var i=0; i < ids.length; i++ ){
         var info = ids[i];
-        console.log("info name is " + info.name);
         ref.child(info.id).set({
             id: info.id,
             name: info.name,
@@ -37,32 +37,10 @@ export function writeItemData(ids){
             quantity: info.quantity
         }, onComplete);
     }
-    // ref.push({
-        
-    //         Id: info.id,
-    //         Name: info.name,
-    //         Price: info.price,
-    //         Quantity: info.quantity
-        
-    // }, onComplete);
-
-    console.log("firebase clicked" );
+    //loops through every id that was removed and removes that id child from firebase collection
+    for (var i=0; i < removedIds.length; i++ ){
+        var info = removedIds[i];
+        ref.child(info.id).remove(onComplete);
+    }
 }
 
-// export function readItemsData(){
-//     var ref = firebase.database().ref("items");
-//     var itemsList = [];
-//     ref.on("value", function(snapshot) {
-//         console.log(snapshot.val());
-//         snapshot.forEach(function(childSnapshot){
-//             console.log(childSnapshot.val());
-//             itemsList.push(childSnapshot.val());
-//         });
-//         console.log("itemsList is " + itemsList.join(", "));
-       
-//     }, function (errorObject) {
-//         console.log("The read failed: " + errorObject.code);
-//     });
-
-//     return itemsList;
-// }

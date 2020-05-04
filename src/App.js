@@ -5,16 +5,28 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
-
+import Button from '@material-ui/core/Button';
 
 import {writeItemData} from './server';
 import firebase from 'firebase';
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
     this.itemsFirebaseRef = firebase.database().ref("items");
+    this.uiConfig = {
+      signInFlow: "popup",
+      signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+      ],
+      callbacks: {
+        signInSuccess: ()=> false
+      }
+
+    }
+   
 
     this.state = {
       ids : [
@@ -22,36 +34,53 @@ export default class App extends Component {
       ],
       removedIds:[
 
-      ]
+      ],
+      user: null
     };
     
     this.updateCartInfo = this.updateCartInfo.bind(this);
     this.increaseItemQuantity = this.increaseItemQuantity.bind(this);
     this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.authListener = this.authListener.bind(this);
   
   }
 
+  authListener(){
+    let App = this;
+    firebase.auth().onAuthStateChanged((user)=> {
+      if (user){
+        this.setState({user});
+        //asynchronous call to firebase collection that suscribes to changes
+        
+        this.itemsFirebaseRef.on("value", function(snapshot) {
+          var itemsList = [];
+          console.log(snapshot.val());
+          snapshot.forEach(function(childSnapshot){
+              console.log(childSnapshot.val());
+              itemsList.push(childSnapshot.val());
+          });
+          
+          App.setState((state) => ({
+            ids: itemsList
+          }));
+        })
+
+      }else{
+        this.setState({user:null});
+      }
+    }
+
+
+    )
+  }
   // good place to initialize state with requests to databases, etc..
   //this will process before first render
   componentDidMount(){
     let App = this;
-    //asynchronous call to firebase collection that suscribes to changes
-    this.itemsFirebaseRef.on("value", function(snapshot) {
-        var itemsList = [];
-        console.log(snapshot.val());
-        snapshot.forEach(function(childSnapshot){
-            console.log(childSnapshot.val());
-            itemsList.push(childSnapshot.val());
-        });
-        
-        App.setState((state) => ({
-          ids: itemsList
-        }));
-       
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    });
+    this.authListener();
+    
+    
   }
 
   //good place to handle updates to component state changes
@@ -185,10 +214,15 @@ export default class App extends Component {
 
   render() { 
       return (  
-        
-          <Router>
+        <div>
+          {this.state.user ? (
+            <Router>
               <div>
                   <Navbar/>
+                  
+                  <Button onClick={()=>{firebase.auth().signOut() }}> 
+                  Sign Out {firebase.auth().currentUser.displayName}</Button>
+                  
                   <Route path="/" exact strict render={(props) => <Cart {...props} ids={this.state.ids} addButtonChange={this.increaseItemQuantity}  removeButtonChange={this.decreaseItemQuantity}   deleteButtonChange={this.deleteItem}      />}   />
 
                   <Route path="/addToCart" exact strict render={(props) => <AddToCart {...props} updateCart={this.updateCartInfo}/>}/>
@@ -197,8 +231,23 @@ export default class App extends Component {
           
 
               </div>
-          </Router>
-       
+            </Router>
+          ): (
+          
+          
+          <div class = "App-header"> 
+            <h1>Welcome to my Shopping Cart App! </h1>
+            <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+
+          </div>
+          
+          
+          )}
+        
+        
+        
+          
+        </div>
       );
   }
 }

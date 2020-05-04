@@ -15,7 +15,7 @@ export const firebaseConfig = {
     measurementId: "G-X04NFFCYLT"
 };
 
-firebase.initializeApp(firebaseConfig);
+//firebase.initializeApp(firebaseConfig);
 
 export function writeItemData(ids, removedIds,userId){
     var ref = firebase.database().ref("users/"+userId+"/items");

@@ -10,11 +10,12 @@ import Button from '@material-ui/core/Button';
 import {writeItemData} from './server';
 import firebase from 'firebase';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import {firebaseConfig} from './server';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-
+    firebase.initializeApp(firebaseConfig);
     this.itemsFirebaseRef = firebase.database().ref("items");
     this.usersRef = firebase.database().ref("users");
     this.uiConfig = {
@@ -71,19 +72,22 @@ export default class App extends Component {
                   }
                 };
                 
+                //sets the user to the users collection and sets its value to be items object 
+                // which is initialized to store "None"
                 firebase.database().ref("users").child(user.uid).set({items:"None"}, onComplete);
-                //firebase.database().ref("users/"+user.uid+"/items").push();
+                
               
               }else{
                   console.log("uid is not null: " + user.uid);
                   //if user in user ids collection, but items collection is null, initialize it
                   if (snapshot.child(user.uid+ "/items").val() === "None"){
                       console.log("empty items list for user");
-                      //firebase.database().ref("users/"+user.uid+"/items").push();
+                      App.setState((state) => ({
+                        ids: []
+                      }));
                   //if item collection is not null, then read from it and set state
                   }else{
-                      
-                    
+ 
                       firebase.database().ref("users/"+user.uid+"/items").on("value", function(snapshot) {
                         var itemsList = [];
                         console.log(snapshot.val());

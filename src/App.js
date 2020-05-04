@@ -16,6 +16,7 @@ export default class App extends Component {
     super(props);
 
     this.itemsFirebaseRef = firebase.database().ref("items");
+    this.usersRef = firebase.database().ref("users");
     this.uiConfig = {
       signInFlow: "popup",
       signInOptions: [
@@ -48,39 +49,70 @@ export default class App extends Component {
 
   authListener(){
     let App = this;
-    firebase.auth().onAuthStateChanged((user)=> {
-      if (user){
-        this.setState({user});
-        //asynchronous call to firebase collection that suscribes to changes
-        
-        this.itemsFirebaseRef.on("value", function(snapshot) {
-          var itemsList = [];
-          console.log(snapshot.val());
-          snapshot.forEach(function(childSnapshot){
-              console.log(childSnapshot.val());
-              itemsList.push(childSnapshot.val());
-          });
-          
-          App.setState((state) => ({
-            ids: itemsList
-          }));
-        })
 
+    //handles authentication state changes
+    firebase.auth().onAuthStateChanged((user)=> {
+      //if user exists/authenticated
+      if (user){
+          console.log("user logged in: " + user.uid);
+          this.setState({user});
+
+          //reads snapshot inside users collection
+          this.usersRef.on("value", function(snapshot){
+              console.log(snapshot.val());
+              // if user is not in users collection (null), then initialize it 
+              if (snapshot.child(user.uid).val() === null){
+                console.log("user id "+ user.uid+" is not found in db");
+                var onComplete = function(error) {
+                  if (error) {
+                      console.log('Write to Firebase failed');
+                  } else {
+                      console.log('Write to Firebase completed');
+                  }
+                };
+                
+                firebase.database().ref("users").child(user.uid).set({items:"None"}, onComplete);
+                //firebase.database().ref("users/"+user.uid+"/items").push();
+              
+              }else{
+                  console.log("uid is not null: " + user.uid);
+                  //if user in user ids collection, but items collection is null, initialize it
+                  if (snapshot.child(user.uid+ "/items").val() === "None"){
+                      console.log("empty items list for user");
+                      //firebase.database().ref("users/"+user.uid+"/items").push();
+                  //if item collection is not null, then read from it and set state
+                  }else{
+                      
+                    
+                      firebase.database().ref("users/"+user.uid+"/items").on("value", function(snapshot) {
+                        var itemsList = [];
+                        console.log(snapshot.val());
+                        snapshot.forEach(function(childSnapshot){
+                            console.log(childSnapshot.val());
+                            itemsList.push(childSnapshot.val());
+                        });
+                        
+                        App.setState((state) => ({
+                          ids: itemsList
+                        }));
+                      })
+
+                  }
+              }
+          });
+      //else user is null
       }else{
         this.setState({user:null});
+        console.log("user logged out");
       }
-    }
-
-
-    )
+      
+    });
   }
+
   // good place to initialize state with requests to databases, etc..
   //this will process before first render
   componentDidMount(){
-    let App = this;
     this.authListener();
-    
-    
   }
 
   //good place to handle updates to component state changes
@@ -88,7 +120,7 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState ){
     if (prevState.ids !== this.state.ids){
       
-      writeItemData(this.state.ids, this.state.removedIds);
+      writeItemData(this.state.ids, this.state.removedIds, (this.state.user).uid);
       this.setState({
         removedIds: []
       });

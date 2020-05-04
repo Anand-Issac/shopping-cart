@@ -17,8 +17,8 @@ export const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export function writeItemData(ids, removedIds){
-    var ref = firebase.database().ref("items");
+export function writeItemData(ids, removedIds,userId){
+    var ref = firebase.database().ref("users/"+userId+"/items");
     //callback function which logs if write to firebase failed / completed
     var onComplete = function(error) {
         if (error) {
@@ -44,3 +44,30 @@ export function writeItemData(ids, removedIds){
     }
 }
 
+
+//asynchronous call to firebase collection that suscribes to changes
+        
+        // this.itemsFirebaseRef.on("value", function(snapshot) {
+        //   var itemsList = [];
+        //   console.log(snapshot.val());
+        //   snapshot.forEach(function(childSnapshot){
+        //       console.log(childSnapshot.val());
+        //       itemsList.push(childSnapshot.val());
+        //   });
+          
+        //   App.setState((state) => ({
+        //     ids: itemsList
+        //   }));
+        // })
+
+//this.firebase.database().ref("users/"+ user.uid).on("value", function(snapshot) {
+              // var itemsList = [];
+              // console.log(snapshot.val());
+              // snapshot.forEach(function(childSnapshot){
+              //     console.log(childSnapshot.val());
+              //     itemsList.push(childSnapshot.val());
+              // });
+              
+              // App.setState((state) => ({
+              //   ids: itemsList
+              // }));

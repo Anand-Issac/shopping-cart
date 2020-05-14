@@ -55,7 +55,7 @@ export default function MiddleDividers(props) {
             </Grid>
             <Grid item>
                 <Typography gutterBottom variant="h6">
-                Total Price of Item: ${props.value.quantity * props.value.price}
+                Total Price of Item: ${(parseInt(props.value.quantity) * parseFloat(props.value.price)) + parseFloat(props.value.shippingCost)}
                 </Typography>
             </Grid>
             </Grid>
@@ -68,6 +68,15 @@ export default function MiddleDividers(props) {
             <Typography color="textSecondary" variant="subtitle1">
             Price of Item: {props.value.price}
             </Typography>
+
+            <Typography color="textSecondary" variant="subtitle1">
+            Shipping Cost: {props.value.shippingCost}
+            </Typography>
+
+            <Typography color="textSecondary" variant="subtitle1">
+            URL to Purchase Item:&nbsp;<a href={props.value.url}>{props.value.url}</a> 
+            </Typography>
+
         </div>
         <Divider variant="middle"/>
         <div className={classes.section2} style={style}>

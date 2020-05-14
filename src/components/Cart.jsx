@@ -60,9 +60,9 @@ export default class Cart extends Component {
         this.props.ids.map((item, key) =>
             {
                 if (item.quantity === 1){
-                    totalPrice += Number(item.price)
+                    totalPrice += (Number(item.price) + Number(item.shippingCost))
                 }else{
-                    totalPrice += ((item.quantity * item.price))
+                    totalPrice += ((item.quantity * item.price) + Number(item.shippingCost))
                 }
             }
              

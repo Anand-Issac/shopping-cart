@@ -31,6 +31,8 @@ export function writeItemData(ids, removedIds,userId){
             id: info.id,
             name: info.name,
             price: info.price,
+            shippingCost: info.shippingCost,
+            url: info.url,
             quantity: info.quantity
         }, onComplete);
     }

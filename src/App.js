@@ -191,7 +191,7 @@ export default class App extends Component {
     
     if (idList.length === 0 ){
       
-      idList.push({id: info.id, name: info.name, price: info.price, quantity:1});
+      idList.push({id: info.id, name: info.name, price: info.price, shippingCost: info.shippingCost, url: info.url, quantity:1});
       this.setState((state) => ({
         ids: idList
       }));
@@ -200,7 +200,7 @@ export default class App extends Component {
       let uniqueIndex = this.uniqueIDCheck(info);
       if (uniqueIndex < 0){
         //id was unique
-        idList.push({id: info.id, name: info.name, price: info.price, quantity:1});
+        idList.push({id: info.id, name: info.name, price: info.price, shippingCost: info.shippingCost, url: info.url, quantity:1});
         this.setState((state) => ({
           ids: idList
         }));

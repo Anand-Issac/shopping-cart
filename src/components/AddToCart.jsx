@@ -30,14 +30,17 @@ class NameForm extends React.Component {
             info: {
                 id: '',
                 name: '',
-                price: null
+                price: null,
+                shippingCost: null,
+                url: ''
+
             },
             submitPressed: false
         };
         
-        this.handleIdChange = this.handleIdChange.bind(this);
+        //this.handleIdChange = this.handleIdChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
-        this.handlePriceChange = this.handlePriceChange.bind(this);
+        //this.handlePriceChange = this.handlePriceChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.sendData = this.sendData.bind(this);
         this.ebaySearch = this.ebaySearch.bind(this);
@@ -84,11 +87,14 @@ class NameForm extends React.Component {
             const minCostIndex = this.findCheapestItem(listOfItems);
             if (minCostIndex > -1 ){
                 const item = listOfItems[minCostIndex];
+                console.log(item.shippingInfo[0]);
                 this.setState({
                     info:{
                         id: item.itemId[0],
                         name: this.state.info.name,
-                        price: item.sellingStatus[0].convertedCurrentPrice[0].__value__
+                        price: item.sellingStatus[0].convertedCurrentPrice[0].__value__,
+                        shippingCost: item.shippingInfo[0].shippingServiceCost[0].__value__,
+                        url: item.viewItemURL[0]
                         
                     },
                     
@@ -100,12 +106,39 @@ class NameForm extends React.Component {
                     info: {
                         id: "",
                         name: "",
-                        price: ""
+                        price: "",
+                        shippingCost: '',
+                        url: ''
                     },
                     submitPressed: false,
                 });
                 
 
+            }else{
+                this.setState({
+                    info:{
+                        id: "00000",
+                        name: "Item Not Found",
+                        price: 0,
+                        shippingCost: 0,
+                        url: ''
+                        
+                    },
+                    
+                });
+
+                this.sendData();
+
+                this.setState({
+                    info: {
+                        id: "",
+                        name: "",
+                        price: "",
+                        shippingCost:'',
+                        url:''
+                    },
+                    submitPressed: false,
+                });               
             }
 
             })
@@ -117,16 +150,29 @@ class NameForm extends React.Component {
 
     findCheapestItem(listOfItems){
         if (listOfItems.length > 0){
-            var minCost = (listOfItems[0].sellingStatus[0].convertedCurrentPrice[0].__value__) + (listOfItems[0].shippingInfo[0].shippingServiceCost[0].__value__);
+            var minCost = 1000000000;
             var minCostIndex = 0;
+            if(listOfItems[0].hasOwnProperty('sellingStatus') && listOfItems[0].hasOwnProperty('shippingInfo')){
+                minCost = (listOfItems[0].sellingStatus[0].convertedCurrentPrice[0].__value__) + (listOfItems[0].shippingInfo[0].shippingServiceCost[0].__value__);
+                minCostIndex = 0;
+            }
+          
             for (let i=0; i < listOfItems.length; i ++){
-                var currentPrice = listOfItems[i].sellingStatus[0].convertedCurrentPrice[0].__value__;
-                var shippingPrice = listOfItems[i].shippingInfo[0].shippingServiceCost[0].__value__;
-                var totalPrice = currentPrice + shippingPrice;
-                if (totalPrice < minCost){
-                    minCost = totalPrice;
-                    minCostIndex = i;
+                if(listOfItems[i].hasOwnProperty('sellingStatus') && listOfItems[i].hasOwnProperty('shippingInfo') 
+                && (listOfItems[i].sellingStatus[0].hasOwnProperty('convertedCurrentPrice')) && (listOfItems[i].shippingInfo[0].hasOwnProperty('shippingServiceCost')))
+                
+                
+                {
+                    var currentPrice = listOfItems[i].sellingStatus[0].convertedCurrentPrice[0].__value__;
+                    var shippingPrice = listOfItems[i].shippingInfo[0].shippingServiceCost[0].__value__;
+                    var totalPrice = currentPrice + shippingPrice;
+                    if (totalPrice < minCost){
+                        minCost = totalPrice;
+                        minCostIndex = i;
                 }
+                }
+
+                
             }
             return minCostIndex;
         }
@@ -134,6 +180,7 @@ class NameForm extends React.Component {
         
     }
 
+    /*
     handleIdChange(event) {
         // sets state of new ID
         this.setState({
@@ -144,6 +191,7 @@ class NameForm extends React.Component {
             }
         });
     }
+    */
 
     handleNameChange(event) {
         //sets state of new name
@@ -155,7 +203,7 @@ class NameForm extends React.Component {
             }
         });
     }
-
+    /*
     handlePriceChange(event) {
         // sets state of new price
         this.setState({
@@ -166,6 +214,7 @@ class NameForm extends React.Component {
             }
         });
     }
+    */
   
     handleSubmit(event) {
       //sends data after submit button pressed
@@ -198,41 +247,17 @@ class NameForm extends React.Component {
         
         return (
         <form onSubmit={this.handleSubmit} id="cart-form">
-          
-            <div>
-            <StyledTextField
-                id="id-field"
-                label="ID"
-                value={this.state.info.id}
-                onChange={this.handleIdChange}
-                variant="outlined"
-               
-            />
-           
-           </div>
-            
+              
            <div>
             <StyledTextField
                 id="name-field"
-                label="Name"
+                label="Name of Item"
                 value={this.state.info.name}
                 onChange={this.handleNameChange}
                 variant="outlined"
             
             />
             </div>
-
-           <div>
-            <StyledTextField
-                id="price-field"
-                label="Price"
-                value={this.state.info.price}
-                onChange={this.handlePriceChange}
-                variant="outlined"
-            
-            />
-            </div>
-
          
    
             <div>

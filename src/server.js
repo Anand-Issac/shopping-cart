@@ -1,4 +1,3 @@
-import App from './App';
 
 var firebase = require("firebase/app");
 require('firebase/auth');
@@ -14,8 +13,6 @@ export const firebaseConfig = {
     appId: "1:986575100469:web:46a6fc4a16c02044e86f7c",
     measurementId: "G-X04NFFCYLT"
 };
-
-//firebase.initializeApp(firebaseConfig);
 
 export function writeItemData(ids, removedIds,userId){
     var ref = firebase.database().ref("users/"+userId+"/items");
@@ -38,36 +35,8 @@ export function writeItemData(ids, removedIds,userId){
         }, onComplete);
     }
     //loops through every id that was removed and removes that id child from firebase collection
-    for (var i=0; i < removedIds.length; i++ ){
-        var info = removedIds[i];
-        ref.child(info.id).remove(onComplete);
+    for (var j=0; j < removedIds.length; j++ ){
+        var info2 = removedIds[j];
+        ref.child(info2.id).remove(onComplete);
     }
 }
-
-
-//asynchronous call to firebase collection that suscribes to changes
-        
-        // this.itemsFirebaseRef.on("value", function(snapshot) {
-        //   var itemsList = [];
-        //   console.log(snapshot.val());
-        //   snapshot.forEach(function(childSnapshot){
-        //       console.log(childSnapshot.val());
-        //       itemsList.push(childSnapshot.val());
-        //   });
-          
-        //   App.setState((state) => ({
-        //     ids: itemsList
-        //   }));
-        // })
-
-//this.firebase.database().ref("users/"+ user.uid).on("value", function(snapshot) {
-              // var itemsList = [];
-              // console.log(snapshot.val());
-              // snapshot.forEach(function(childSnapshot){
-              //     console.log(childSnapshot.val());
-              //     itemsList.push(childSnapshot.val());
-              // });
-              
-              // App.setState((state) => ({
-              //   ids: itemsList
-              // }));

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css'
-import update from 'react-addons-update'; 
 
-import { BrowserRouter as Router, Link, NavLink, Redirect, Prompt} from 'react-router-dom';
-import Route from 'react-router-dom/Route';
 import ItemContainer from './ItemContainer';
 
 
@@ -62,7 +59,7 @@ export default class Cart extends Component {
         let totalPrice = 0;
         this.props.ids.map((item, key) =>
             {
-                if (item.quantity == 1){
+                if (item.quantity === 1){
                     totalPrice += Number(item.price)
                 }else{
                     totalPrice += ((item.quantity * item.price))

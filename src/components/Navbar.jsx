@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 import ShoppingCartRoundedIcon from '@material-ui/icons/ShoppingCartRounded';
 
@@ -21,14 +20,7 @@ class Navbar extends Component {
     }
 
     render() { 
-        const navStyle = {
-            color: 'white'
-        }
-
-        const backStyle = {
-            backgroundColor: "#D3D3D3"
-        }
-
+        
         return (
             <div >
                 

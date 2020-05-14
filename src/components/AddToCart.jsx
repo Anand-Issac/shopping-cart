@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import { withStyles } from '@material-ui/core/styles';
-
-//import {writeItemData} from '../server';
 
 
 const StyledButton = withStyles({
@@ -36,7 +33,7 @@ class NameForm extends React.Component {
               price: null
             }
         };
-  
+        
         this.handleIdChange = this.handleIdChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handlePriceChange = this.handlePriceChange.bind(this);
@@ -81,21 +78,31 @@ class NameForm extends React.Component {
       //sends data after submit button pressed
       this.sendData();
       event.preventDefault();
+      this.setState({
+        info: {
+            id: "",
+            name: "",
+            price: ""
+        }
+        });
+ 
     }
 
     sendData(){
         //updates the sendData prop that parent component passed
         this.props.sendData(this.state.info);
     }
-  
+    
+    
+
     render() {
         
         return (
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} id="cart-form">
           
             <div>
             <StyledTextField
-                id="outlined-name"
+                id="id-field"
                 label="ID"
                 value={this.state.info.id}
                 onChange={this.handleIdChange}
@@ -107,7 +114,7 @@ class NameForm extends React.Component {
             
            <div>
             <StyledTextField
-                id="outlined-name"
+                id="name-field"
                 label="Name"
                 value={this.state.info.name}
                 onChange={this.handleNameChange}
@@ -118,7 +125,7 @@ class NameForm extends React.Component {
 
            <div>
             <StyledTextField
-                id="outlined-name"
+                id="price-field"
                 label="Price"
                 value={this.state.info.price}
                 onChange={this.handlePriceChange}
@@ -130,7 +137,7 @@ class NameForm extends React.Component {
          
    
             <div>
-            <StyledButton variant="contained" color="primary" type="submit" value="Submit" > 
+            <StyledButton variant="contained" color="primary" type="submit" value="Submit" onSubmit={this.resetForm}> 
             Submit
             </StyledButton>
             </div>

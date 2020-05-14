@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
+
+
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { dark } from '@material-ui/core/styles/createPalette';
-import AddIcon from '@material-ui/icons/Add';
+
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded';
-import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
+
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 

@@ -2,6 +2,7 @@
   "name": "shopping-cart",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://svcs.ebay.com",
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.9.1",
@@ -10,8 +11,10 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
+    "ebay-node-api": "^2.8.4",
     "express": "^4.17.1",
     "firebase": "^7.14.2",
+    "http-proxy-middleware": "^1.0.3",
     "react": "^16.13.1",
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.13.1",

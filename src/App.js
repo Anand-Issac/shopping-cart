@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
 import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
@@ -12,12 +11,13 @@ import firebase from 'firebase';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import {firebaseConfig} from './server';
 
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     firebase.initializeApp(firebaseConfig);
-    this.itemsFirebaseRef = firebase.database().ref("items");
-    this.usersRef = firebase.database().ref("users");
+    //Google search API key
+    //AIzaSyAYAC2C96gTJg0yTQJ7u1lJiq-gm87Em0o
     this.uiConfig = {
       signInFlow: "popup",
       signInOptions: [
@@ -45,6 +45,7 @@ export default class App extends Component {
     this.decreaseItemQuantity = this.decreaseItemQuantity.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.authListener = this.authListener.bind(this);
+    
   
   }
 
@@ -53,16 +54,18 @@ export default class App extends Component {
 
     //handles authentication state changes
     firebase.auth().onAuthStateChanged((user)=> {
+      
       //if user exists/authenticated
       if (user){
+          const userRef = firebase.database().ref("users/"+user.uid);
           console.log("user logged in: " + user.uid);
           this.setState({user});
 
           //reads snapshot inside users collection
-          this.usersRef.on("value", function(snapshot){
+          userRef.on("value", function(snapshot){
               console.log(snapshot.val());
               // if user is not in users collection (null), then initialize it 
-              if (snapshot.child(user.uid).val() === null){
+              if (snapshot.val() === null){
                 console.log("user id "+ user.uid+" is not found in db");
                 var onComplete = function(error) {
                   if (error) {
@@ -74,13 +77,13 @@ export default class App extends Component {
                 
                 //sets the user to the users collection and sets its value to be items object 
                 // which is initialized to store "None"
-                firebase.database().ref("users").child(user.uid).set({items:"None"}, onComplete);
+                userRef.set({items:"None"}, onComplete);
                 
               
               }else{
                   console.log("uid is not null: " + user.uid);
                   //if user in user ids collection, but items collection is null, initialize it
-                  if (snapshot.child(user.uid+ "/items").val() === "None"){
+                  if (snapshot.child("items").val() === "None"){
                       console.log("empty items list for user");
                       App.setState((state) => ({
                         ids: []
@@ -113,10 +116,78 @@ export default class App extends Component {
     });
   }
 
+  geoLocateStuff(){
+    if('geolocation' in navigator) {
+      /* geolocation is available */
+      console.log("geo is available");
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+      });
+    } else {
+      /* geolocation IS NOT available */
+      console.log("geo is not available");
+    }
+  }
+
+  
+
+  
+  
+
   // good place to initialize state with requests to databases, etc..
   //this will process before first render
   componentDidMount(){
     this.authListener();
+    this.geoLocateStuff();
+    /*
+    this.ebaySearch();
+    this.postData('https://svcs.ebay.com/services/search/FindingService/v1')
+    .then(data => {
+      console.log(data); // JSON data parsed by `response.json()` call
+    });
+    */
+    
+    const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=AnandIss-shopping-PRD-1c51f635b-2111347e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=iPhone"
+    let h = new Headers();
+    h.append("X-EBAY-SOA-OPERATION-NAME", 'findItemsByKeywords');
+    h.append('X-EBAY-SOA-SECURITY-APPNAME','AnandIss-shopping-PRD-1c51f635b-2111347e');
+    h.append('X-EBAY-SOA-RESPONSE-DATA-FORMAT', 'JSON');
+
+    let req = new Request(uri, {
+      method: "GET",
+      headers: h,
+      mode: "cors"
+    });
+
+    fetch(req)
+    .then((response) => {
+      console.log("hi program");
+      console.log(response);
+    response.json().then(data =>{console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item[0])})
+    }).catch((err)=>{
+      console.log('error:', err.message);
+    })
+
+
+
+
+
+
+    //Here is sample code on fetching data from an API (no auth needed)
+    /*
+    fetch("https://api.wheretheiss.at/v1/satellites/25544").then((res) => {  
+      return res.json();
+    }
+    ).then(
+      (parsedData)=>{
+        console.log(parsedData);
+      }
+    );
+    */
+
+    //geolocatoin api 
+
+
   }
 
   //good place to handle updates to component state changes
@@ -141,7 +212,7 @@ export default class App extends Component {
       // if unique: push it to the array
       // else: increase the object with that id and increase it's quantity
     
-    if (idList.length == 0 ){
+    if (idList.length === 0 ){
       
       idList.push({id: info.id, name: info.name, price: info.price, quantity:1});
       this.setState((state) => ({
@@ -271,7 +342,7 @@ export default class App extends Component {
           ): (
           
           
-          <div class = "App-header"> 
+          <div className = "App-header"> 
             <h1>Welcome to my Shopping Cart App! </h1>
             <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
 

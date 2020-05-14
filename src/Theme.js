@@ -26,7 +26,7 @@ const useDarkMode = () => {
             palette:{
                 primary: {main : '#053f5b'},
                 secondary: {main : "#5e3c6f"},
-                type: type == "light" ? "dark":'light'
+                type: type === "light" ? "dark":'light'
             },
             themeName: 'Blue Lagoon 2020',
             typography: {

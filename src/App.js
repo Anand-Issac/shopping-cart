@@ -139,15 +139,10 @@ export default class App extends Component {
   componentDidMount(){
     this.authListener();
     this.geoLocateStuff();
-    /*
-    this.ebaySearch();
-    this.postData('https://svcs.ebay.com/services/search/FindingService/v1')
-    .then(data => {
-      console.log(data); // JSON data parsed by `response.json()` call
-    });
-    */
     
-    const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=AnandIss-shopping-PRD-1c51f635b-2111347e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=iPhone"
+    /*
+    //this finds keyword item and returns u info from ebay, logs it to console
+    const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=AnandIss-shopping-PRD-1c51f635b-2111347e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=Maple Syrup"
     let h = new Headers();
     h.append("X-EBAY-SOA-OPERATION-NAME", 'findItemsByKeywords');
     h.append('X-EBAY-SOA-SECURITY-APPNAME','AnandIss-shopping-PRD-1c51f635b-2111347e');
@@ -163,29 +158,11 @@ export default class App extends Component {
     .then((response) => {
       console.log("hi program");
       console.log(response);
-    response.json().then(data =>{console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item[0])})
+    response.json().then(data =>{console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item[0].sellingStatus[0].convertedCurrentPrice[0].__value__)})
     }).catch((err)=>{
       console.log('error:', err.message);
     })
-
-
-
-
-
-
-    //Here is sample code on fetching data from an API (no auth needed)
-    /*
-    fetch("https://api.wheretheiss.at/v1/satellites/25544").then((res) => {  
-      return res.json();
-    }
-    ).then(
-      (parsedData)=>{
-        console.log(parsedData);
-      }
-    );
     */
-
-    //geolocatoin api 
 
 
   }

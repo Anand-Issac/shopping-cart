@@ -1,0 +1,25 @@
+[debug] [2020-05-15T23:28:41.388Z] ----------------------------------------------------------------------
+[debug] [2020-05-15T23:28:41.391Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only hosting
+[debug] [2020-05-15T23:28:41.391Z] CLI Version:   8.2.0
+[debug] [2020-05-15T23:28:41.391Z] Platform:      darwin
+[debug] [2020-05-15T23:28:41.391Z] Node Version:  v10.16.0
+[debug] [2020-05-15T23:28:41.392Z] Time:          Fri May 15 2020 19:28:41 GMT-0400 (Eastern Daylight Time)
+[debug] [2020-05-15T23:28:41.392Z] ----------------------------------------------------------------------
+[debug] [2020-05-15T23:28:41.392Z] 
+[debug] [2020-05-15T23:28:41.400Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-15T23:28:41.401Z] > authorizing via signed-in user
+[debug] [2020-05-15T23:28:41.401Z] [iam] checking project shopping-cart-b4473 for permissions ["firebase.projects.get"]
+[debug] [2020-05-15T23:28:41.404Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/shopping-cart-b4473:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-05-15T23:28:41.779Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 15 May 2020 23:29:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=228","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-15T23:28:41.781Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/shopping-cart-b4473  
+ 
+[debug] [2020-05-15T23:28:41.916Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 15 May 2020 23:29:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-15T23:28:41.918Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/shopping-cart-b4473/webApps/-/config  
+ 
+[debug] [2020-05-15T23:28:42.185Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 15 May 2020 23:29:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[warn] ⚠  hosting: Port 5000 is not available. Trying another port...
+[info] i  hosting: Serving hosting files from: build
+[info] ✔  hosting: Local server: http://localhost:5005
+[debug] [2020-05-15T23:53:59.803Z] Error: write EIO
+    at WriteWrap.afterWrite [as oncomplete] (net.js:788:14)

@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
+require('dotenv').config();
+
 
 const StyledButton = withStyles({
     root: { 
@@ -64,10 +66,10 @@ class NameForm extends React.Component {
     ebaySearch(keyword){
         console.log("searching ebay");
         //this finds keyword item and returns u info from ebay, logs it to console
-        const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=AnandIss-shopping-PRD-1c51f635b-2111347e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+keyword
+        const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=" + process.env.REACT_APP_EBAY_APP_ID+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+keyword
         let h = new Headers();
         h.append("X-EBAY-SOA-OPERATION-NAME", 'findItemsByKeywords');
-        h.append('X-EBAY-SOA-SECURITY-APPNAME','AnandIss-shopping-PRD-1c51f635b-2111347e');
+        h.append('X-EBAY-SOA-SECURITY-APPNAME',process.env.REACT_APP_EBAY_APP_ID);
         h.append('X-EBAY-SOA-RESPONSE-DATA-FORMAT', 'JSON');
 
         let req = new Request(uri, {
@@ -82,7 +84,7 @@ class NameForm extends React.Component {
             console.log(response);
             response.json()
         .then(data =>{
-            console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item)
+            //console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item)
             const listOfItems = data.findItemsByKeywordsResponse[0].searchResult[0].item;
             const minCostIndex = this.findCheapestItem(listOfItems);
             if (minCostIndex > -1 ){

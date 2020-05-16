@@ -2,15 +2,19 @@
 var firebase = require("firebase/app");
 require('firebase/auth');
 require('firebase/database');
+require('dotenv').config();
 
+console.log(process.env);
 export const firebaseConfig = {
-    apiKey: "AIzaSyAYAC2C96gTJg0yTQJ7u1lJiq-gm87Em0o",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    
     authDomain: "shopping-cart-b4473.firebaseapp.com",
     databaseURL: "https://shopping-cart-b4473.firebaseio.com",
     projectId: "shopping-cart-b4473",
     storageBucket: "shopping-cart-b4473.appspot.com",
     messagingSenderId: "986575100469",
-    appId: "1:986575100469:web:46a6fc4a16c02044e86f7c",
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  
     measurementId: "G-X04NFFCYLT"
 };
 

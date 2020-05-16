@@ -15,7 +15,10 @@ import {firebaseConfig} from './server';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
     //Google search API key
     //AIzaSyAYAC2C96gTJg0yTQJ7u1lJiq-gm87Em0o
     this.uiConfig = {

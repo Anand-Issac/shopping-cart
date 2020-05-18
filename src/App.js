@@ -5,22 +5,20 @@ import AddToCart from './components/AddToCart';
 import Cart from './components/Cart'
 import Navbar from './components/Navbar';
 import Button from '@material-ui/core/Button';
+import Login from './components/Login/Login';
 
 import {writeItemData} from './server';
 import firebase from 'firebase';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import {firebaseConfig} from './server';
+
+
 
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
     
-    //Google search API key
-    //AIzaSyAYAC2C96gTJg0yTQJ7u1lJiq-gm87Em0o
+  
     this.uiConfig = {
       signInFlow: "popup",
       signInOptions: [
@@ -143,31 +141,6 @@ export default class App extends Component {
     this.authListener();
     this.geoLocateStuff();
     
-    /*
-    //this finds keyword item and returns u info from ebay, logs it to console
-    const uri = "/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=AnandIss-shopping-PRD-1c51f635b-2111347e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=Maple Syrup"
-    let h = new Headers();
-    h.append("X-EBAY-SOA-OPERATION-NAME", 'findItemsByKeywords');
-    h.append('X-EBAY-SOA-SECURITY-APPNAME','AnandIss-shopping-PRD-1c51f635b-2111347e');
-    h.append('X-EBAY-SOA-RESPONSE-DATA-FORMAT', 'JSON');
-
-    let req = new Request(uri, {
-      method: "GET",
-      headers: h,
-      mode: "cors"
-    });
-
-    fetch(req)
-    .then((response) => {
-      console.log("hi program");
-      console.log(response);
-    response.json().then(data =>{console.log(data.findItemsByKeywordsResponse[0].searchResult[0].item[0].sellingStatus[0].convertedCurrentPrice[0].__value__)})
-    }).catch((err)=>{
-      console.log('error:', err.message);
-    })
-    */
-
-
   }
 
   //good place to handle updates to component state changes
@@ -299,7 +272,15 @@ export default class App extends Component {
 
 
 
-  render() { 
+  render() {
+    const wordStyle = {
+      fontWeight: "bold",
+      fontFamily: ['Montserrat', "sans-serif"],
+      textAlign:"center", 
+      marginTop:"20px",
+      color:"#FF4B2B"
+    }; 
+    
       return (  
         <div>
           {this.state.user ? (
@@ -322,10 +303,20 @@ export default class App extends Component {
           ): (
           
           
-          <div className = "App-header"> 
-            <h1>Welcome to my Shopping Cart App! </h1>
-            <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+          <div > 
+            <h1 style={{textAlign:"center", marginTop:"30px", marginBottom:"30px"}}>Welcome to cheap<span style={wordStyle}>Cart</span>! </h1>
+           
+            
+            
+            <Login/>
+         
 
+            <p style={{textAlign:"center",fontSize:"20px",fontWeight:"150", marginBottom:"5px", marginTop:"60px"}}>Have you ever spent hours on Ebay scrolling to find what you want? 
+            </p>
+            <p style={{textAlign:"center",fontSize:"20px", fontWeight:"250"}}>Well no more because 
+              cheapCart will do the work for you!
+            </p>
+            
           </div>
           
           

@@ -43,13 +43,15 @@ export default function MiddleDividers(props) {
     var style = {
         padding: "10px"
     };
+    
 
     return (
+       
         <div className={classes.root}>
         <div className={classes.section1} style={style}>
             <Grid container alignItems="center">
             <Grid item xs>
-                <Typography gutterBottom variant="h4">
+                <Typography className="typo" gutterBottom variant="h4">
                 {props.value.name}
                 </Typography>
             </Grid>

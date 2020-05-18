@@ -91,8 +91,8 @@ export default class Cart extends Component {
         };
         return (  
             <div>
-                <h1 style={style}>{this.totalItemsinCart()} Items in Cart</h1>
-                <h3 style={style}>Price of Cart: ${this.totalPriceofCart()} </h3>
+                <h2 style={style}>{this.totalItemsinCart()} Items in Cart</h2>
+                <h3 style={style}>Price of Cart: ${Math.round((this.totalPriceofCart() + Number.EPSILON) * 100) / 100} </h3>
                 {this.props.ids.map((item, key) =>
                 <Item item={item} key={item.id} addButtonChange={this.increaseItemQuantity} removeButtonChange={this.decreaseItemQuantity} deleteButtonChange={this.deleteItem}/>
                 )}

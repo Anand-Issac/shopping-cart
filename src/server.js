@@ -18,6 +18,9 @@ export const firebaseConfig = {
     measurementId: "G-X04NFFCYLT"
 };
 
+const fire = firebase.initializeApp(firebaseConfig);
+export default fire;
+
 export function writeItemData(ids, removedIds,userId){
     var ref = firebase.database().ref("users/"+userId+"/items");
     //callback function which logs if write to firebase failed / completed
@@ -31,6 +34,7 @@ export function writeItemData(ids, removedIds,userId){
     //loops through every id in the id list and sets the child to the properties of info object
     for (var i=0; i < ids.length; i++ ){
         var info = ids[i];
+        console.log(info);
         ref.child(info.id).set({
             id: info.id,
             name: info.name,

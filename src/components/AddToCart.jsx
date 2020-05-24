@@ -55,12 +55,21 @@ class NameForm extends React.Component {
         if (prevState.submitPressed !== this.state.submitPressed){
             if (this.state.submitPressed === true){
                 console.log("componentDidUpdate");
-                this.ebaySearch(this.state.info.name);
+                this.ebaySearchExpress(this.state.info.name);
             }
         
         
         }
     
+    }
+
+    ebaySearchExpress(keyword){
+        fetch(`/search?keyword=${keyword}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // prints actual data.
+        })
+        .catch(error => console.log(error));
     }
     
     ebaySearch(keyword){
@@ -182,18 +191,7 @@ class NameForm extends React.Component {
         
     }
 
-    /*
-    handleIdChange(event) {
-        // sets state of new ID
-        this.setState({
-            info: {
-                id: event.target.value,
-                name: this.state.info.name,
-                price: this.state.info.price
-            }
-        });
-    }
-    */
+   
 
     handleNameChange(event) {
         //sets state of new name
@@ -205,18 +203,7 @@ class NameForm extends React.Component {
             }
         });
     }
-    /*
-    handlePriceChange(event) {
-        // sets state of new price
-        this.setState({
-            info: {
-                id: this.state.info.id,
-                name: this.state.info.name,
-                price: event.target.value
-            }
-        });
-    }
-    */
+    
   
     handleSubmit(event) {
       //sends data after submit button pressed
@@ -225,15 +212,7 @@ class NameForm extends React.Component {
       });
       //this.sendData();
       event.preventDefault();
-      /*
-      this.setState({
-        info: {
-            id: "",
-            name: "",
-            price: ""
-        }
-        });
-    */
+      
  
     }
 

@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import Button from '@material-ui/core/Button';
 import Login from './components/Login/Login';
 
-import {writeItemData} from './server';
+import {writeItemData} from './fire';
 import firebase from 'firebase';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
@@ -311,11 +311,7 @@ export default class App extends Component {
             <Login/>
          
 
-            <p style={{textAlign:"center",fontSize:"20px",fontWeight:"150", marginBottom:"5px", marginTop:"60px"}}>Have you ever spent hours on Ebay scrolling to find what you want? 
-            </p>
-            <p style={{textAlign:"center",fontSize:"20px", fontWeight:"250"}}>Well no more because 
-              cheapCart will do the work for you!
-            </p>
+        
             
           </div>
           

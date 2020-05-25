@@ -55,7 +55,7 @@ class NameForm extends React.Component {
         if (prevState.submitPressed !== this.state.submitPressed){
             if (this.state.submitPressed === true){
                 console.log("componentDidUpdate");
-                this.ebaySearchExpress(this.state.info.name);
+                this.ebaySearch(this.state.info.name);
             }
         
         
